@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "../lib_example/example.h"
+#include "../lib_stack/stack.h"
 
 int main() {
   int a = 1, b = 4; 
@@ -29,6 +30,14 @@ int main() {
   ExampleClass<int> obj(10);
   obj.setRandValues(-50, 30);
   std::cout << obj << std::endl;
+
+  Stack<int> st(10);
+  st.push(1);
+  st.push(2);
+  st.push(3);
+  st.pop();
+  st.push(4);
+  st.print();
 
   return 0;
 }
