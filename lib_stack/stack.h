@@ -1,3 +1,5 @@
+// Copyright 2023 Dudchenko Olesya
+
 #include <iostream>
 
 template <typename T>
@@ -19,7 +21,6 @@ public:
             data[i] = st.data[i];
         }
     }
-
     ~Stack() {
         delete []data;
         data = nullptr;
