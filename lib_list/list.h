@@ -23,9 +23,6 @@ public:
         else { return 0; }
     }
 
-    /*bool operator=() {
-
-    }*/
     friend std::ostream& operator<<(std::ostream& ostr, const TNode& node);
 };
 

@@ -1,8 +1,9 @@
-// Copyright 2022 Marina Usova
+// Copyright 2023 Dudchenko Olesya
 
 #include <iostream>
 #include "../lib_example/example.h"
 #include "../lib_stack/stack.h"
+#include "../lib_algorithms/algorithms.h"
 
 int main() {
   int a = 1, b = 4; 
@@ -38,6 +39,8 @@ int main() {
   st.pop();
   st.push(4);
   st.print();
+
+  check_bracket();
 
   return 0;
 }

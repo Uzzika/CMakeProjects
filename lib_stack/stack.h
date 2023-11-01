@@ -1,5 +1,8 @@
 // Copyright 2023 Dudchenko Olesya
 
+#ifndef LIB_STACK_STACK_H_
+#define LIB_STACK_STACK_H_
+
 #include <iostream>
 
 template <typename T>
@@ -69,3 +72,5 @@ void Stack<T>::print() {
         copy.pop();
     }
 }
+
+#endif  // LIB_STACK_STACK_H_
