@@ -9,7 +9,7 @@ class DSU {
     int size;
     int* ranks_array;
 public:
-    explicit DSU(int _size) : size(_size) { //конструкторы, которые не должны неявно преобразовывать типы в C ++
+    explicit DSU(int _size) : size(_size) { //РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂС‹, РєРѕС‚РѕСЂС‹Рµ РЅРµ РґРѕР»Р¶РЅС‹ РЅРµСЏРІРЅРѕ РїСЂРµРѕР±СЂР°Р·РѕРІС‹РІР°С‚СЊ С‚РёРїС‹ РІ C ++
         data_array = new int[size + 1];
         ranks_array = new int[size + 1];
         data_array[0] = -1;
@@ -35,7 +35,7 @@ public:
         int par_x = find(x);
         int par_y = find(y);
 
-        //дописать
+        //РґРѕРїРёСЃР°С‚СЊ
     }
 };
 
