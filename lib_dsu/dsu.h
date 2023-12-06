@@ -1,8 +1,10 @@
 // Copyright (c) Dudchenko Olesya Victorovna
 
-#ifndef INCLUDE_DSU_H_
-#define INCLUDE_DSU_H_
+#ifndef DSU_DSU_H_
+#define DSU_DSU_H_
 using namespace std;
+
+#include <iostream>
 
 class DSU {
     int* data_array;
@@ -34,9 +36,38 @@ public:
     void union_dsu(int x, int y) {
         int par_x = find(x);
         int par_y = find(y);
-
-        //дописать
+        if (par_x != par_y){ data_array[par_y] = par_x; }
     }
+
+    void print() {
+        for (int i = 0; i <= size; i++) {
+            if (i == 0) {
+                std::cout << "P:" << " ";
+                continue;
+            }
+            std::cout << data_array[i] << " ";
+        }
+        std::cout << std::endl;
+        for (int i = 0; i <= size; i++) {
+            if (i == 0) {
+                std::cout << "I:" << " ";
+                continue;
+            }
+            std::cout << i << " ";
+        }
+        std::cout << std::endl;
+    }
+};
+
+class maze {
+    DSU rooms;
+    bool *rightwall;
+    bool *bottomwall;
+    int weight;
+    int height;
+    friend class DSU;
+public:
+    maze(int _h, int _w){}
 };
 
 #endif  // INCLUDE_DSU_H_
