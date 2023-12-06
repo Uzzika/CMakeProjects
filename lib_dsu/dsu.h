@@ -57,17 +57,19 @@ public:
         }
         std::cout << std::endl;
     }
-};
 
-class maze {
-    DSU rooms;
-    bool *rightwall;
-    bool *bottomwall;
-    int weight;
-    int height;
-    friend class DSU;
-public:
-    maze(int _h, int _w){}
+    int getParent(int x) {
+        return data_array[x];
+    }
+
+    void setset(int x, int val) {
+        data_array[x] = val;
+    }
+    void clearset() {
+        for (int i = 1; i <= size; i++) {
+            data_array[i] = i;
+        }
+    }
 };
 
 #endif  // INCLUDE_DSU_H_
