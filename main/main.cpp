@@ -4,6 +4,7 @@
 #include "../lib_example/example.h"
 #include "../lib_stack/stack.h"
 #include "../lib_algorithms/algorithms.h"
+#include "../lib_dsu/dsu.h"
 
 int main() {
   int a = 1, b = 4; 
@@ -40,7 +41,7 @@ int main() {
   st.push(4);
   st.print();
 
-  check_bracket();
+  //DSU 
 
   return 0;
 }
