@@ -17,6 +17,7 @@ add_subdirectory(lib_algorithms)
 add_subdirectory(lib_dsu)
 add_subdirectory(lib_islands)
 add_subdirectory(lib_arithmetic)
+add_subdirectory(lib_queue)
 add_subdirectory(main)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)   # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
