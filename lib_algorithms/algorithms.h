@@ -1,7 +1,7 @@
 // Copyright 2023 Dudchenko Olesya
 
-#ifndef ALGORIHMSH_ALGORIHMSH_H_
-#define ALGORIHMSH_ALGORIHMSH_H_
+#ifndef LIB_ALGORIHMSH_ALGORIHMSH_H_
+#define LIB_ALGORIHMSH_ALGORIHMSH_H_
 
 #include <algorithm>
 #include <exception>
@@ -13,7 +13,7 @@
 
 
 void print_menu() {
-    //std::cout << "Ваше выражение: " << expr << std::endl;
+    // std::cout << "Ваше выражение: " << expr << std::endl;
     std::cout << "Меню:" << std::endl;
     std::cout << "  1. Задать значение переменной." << std::endl;
     std::cout << "  2. Увидеть обратную польскую запись." << std::endl;
@@ -26,10 +26,9 @@ void print_menu() {
 class Parser {
     friend class Stack<std::string>;
     std::string expr;
-public:
-    Parser() {
-        expr = "none";
-    }
+
+ public:
+    Parser() {expr = "none";}
     Parser(std::string _expr) : expr(_expr) {}
     Parser(const Parser& p) :expr(p.expr) {}
 
@@ -48,53 +47,53 @@ public:
 
     bool CheckBracket() {
         Stack<std::string> stack(15);
-        if (expr.size() == 0) {
+        if (expr.size() == 0){
             throw std::logic_error("String is empty!");
         }
         for (int i = 0; i < expr.size(); i++) {
-            if (expr[i] == '(') {
+            if (expr[i] == '('){
                 stack.push(std::to_string(expr[i]));
             }
-            if (expr[i] == '{') {
+            if (expr[i] == '{'){
                 stack.push(std::to_string(expr[i]));
             }
-            if (expr[i] == '[') {
+            if (expr[i] == '['){
                 stack.push(std::to_string(expr[i]));
             }
-            if (expr[i] == ')') {
+            if (expr[i] == ')'){
                 if (stack.getTop() == std::to_string('(')) {
                     stack.pop();
                 }
-                else {
+                else{
                     return 0;
                 }
             }
-            if (expr[i] == ']') {
-                if (stack.getTop() == std::to_string('[')) {
+            if (expr[i] == ']'){
+                if (stack.getTop() == std::to_string('[')){
                     stack.pop();
                 }
-                else {
+                else{
                     return 0;
                 }
             }
-            if (expr[i] == '}') {
+            if (expr[i] == '}'){
                 if (stack.getTop() == std::to_string('{')) {
                     stack.pop();
                 }
-                else {
+                else{
                     return 0;
                 }
             }
             if (expr[i] != '{' || expr[i] != '}' || expr[i] != '(' || 
-                expr[i] != ')' || expr[i] != '[' || expr[i] != ']') {
+                expr[i] != ')' || expr[i] != '[' || expr[i] != ']'){
                 throw std::logic_error("The entered element is not a bracket!");
             }
 
         }
-        if (stack.isEmpty() == true) {
+        if (stack.isEmpty() == true){
             return 1;
         }
-        else {
+        else{
             if (stack.getTop() == std::to_string('[') || stack.getTop() == std::to_string('{') || 
             stack.getTop() == std::to_string('(') || stack.getTop() == std::to_string('}') || 
             stack.getTop() == std::to_string('}') || stack.getTop() == std::to_string(']')) {
@@ -118,4 +117,4 @@ std::ostream& operator<<(std::ostream& out, Parser& p) {
 }
 
 
-#endif ALGORIHMSH_ALGORIHMSH_H_
+#endif LIB_ALGORIHMSH_ALGORIHMSH_H_

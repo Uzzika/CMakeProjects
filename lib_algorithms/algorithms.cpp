@@ -14,10 +14,10 @@ int main() {
     system("cls");
     exp.DeleteSpaces();
     std::cout << exp;
-    if (exp.CheckBracket() == 1) {
+    if (exp.CheckBracket() == 1){
         std::cout << "The sequence of brackets is correct\n";
     }
-    else {
+    else{
         std::cout << "The sequence of brackets is incorrect\n";
     }
     system("pause");
