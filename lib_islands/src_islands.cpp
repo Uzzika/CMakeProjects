@@ -1,48 +1,79 @@
-// Copyright (c) Dudchenko Olesya Victorovna
+// Copyright 2023 (c) Dudchenko Olesya Victorovna
+
+#include <iostream>
 #include "../lib_dsu/dsu.h"
+#include <time.h>
 
-void Island(DSU sets, int** arr, int M, int N) {
-    for (int i = 0; i < M; i++) {
-        for (int j = 0; j < N; j++) {
-            if (j != N - 1) {
-                if (arr[i][j] == 1 && arr[i][j + 1] == 1) { sets.union_dsu((j + i * N) + 1, ((j + 1) + i * N) + 1); }
-            }
-            if (i != M - 1)
-                if (arr[i][j] == 1 && arr[i + 1][j] == 1)
-                    sets.union_dsu((j + i * N) + 1, (j + (i + 1) * N) + 1);
-        }
-    }
+#define ISLAND_
+
+#ifdef MAZE_
+void main() {
+    srand(time(NULL));
+    unionmaze maze(10, 10);
+    maze.maze_generator();
+    maze.printmaze();
+    std::cout << std::endl;
+    maze.printmaze(true);
 }
+#endif // !
 
-int CountOfIslands(DSU sets, int** arr, int M, int N) {
-    int n = 0;
-    for (int i = 1; i <= M * N; i++) {
-        if (sets.getParent(i) == i) { n++; }
-    }
-    return n;
+#ifdef ISLAND_
+void main() {
+    int test_arr1[3][4] = { {1,1,0,0},
+                            {1,0,0,0},
+                            {0,0,1,0} };
+
+    int test_arr2[5][5] = { {0,0,0,0,0},
+                            {0,0,0,0,0},
+                            {0,0,0,0,0},
+                            {0,0,0,0,0},
+                            {0,0,0,0,0} };
+
+    int test_arr3[5][6] = { {1,1,1,1,1,1},
+                            {1,1,1,1,1,1},
+                            {1,1,1,1,1,1},
+                            {1,1,1,1,1,1},
+                            {1,1,1,1,1,1} };
+    int test_arr4[5][5] = { {1,1,0,0,0},
+                            {1,0,0,1,1},
+                            {0,0,1,1,0},
+                            {0,1,0,0,0},
+                            {1,1,0,0,1} };
+
+    int test_arr5[5][5] = { {1,1,1,1,1},
+                            {1,1,1,1,1},
+                            {1,1,1,1,1},
+                            {1,1,1,1,1},
+                            {1,1,1,1,1} };
+
+    ///
+    islands test1(3, 4, reinterpret_cast<int*>(test_arr1));
+    islands test2(5, 5, reinterpret_cast<int*>(test_arr2));
+    islands test3(5, 6, reinterpret_cast<int*>(test_arr3));
+    islands test4(5, 5, reinterpret_cast<int*>(test_arr3));
+    islands test5(5, 5, reinterpret_cast<int*>(test_arr3));
+
+    test1.constructIslands();
+    test1.tozeroset();
+    test1.cntislands();
+    std::cout << "test 1: " << test1.getcnt() << std::endl;
+    test2.constructIslands();
+    test2.tozeroset();
+    test2.cntislands();
+    std::cout << "test 2: " << test2.getcnt() << std::endl;
+    test3.constructIslands();
+    test3.tozeroset();
+    test3.cntislands();
+    std::cout << "test 3: " << test3.getcnt() << std::endl;
+    test4.constructIslands();
+    test4.tozeroset();
+    test4.cntislands();
+    std::cout << "test 4: " << test4.getcnt() << std::endl;
+    test5.constructIslands();
+    test5.tozeroset();
+    test5.cntislands();
+    std::cout << "test 5: " << test5.getcnt() << std::endl;
+
+    system("pause");
 }
-
-
-int main() {
-    DSU sets1(12);
-    int data1[3][4]{
-        {1, 0, 1, 0},
-        {1, 1, 0, 0},
-        {0, 1, 0, 1}
-    };
-
-    //
-    DSU sets2(15);
-    int data2[5][3]{
-        {1, 0, 1},
-        {1, 1, 0},
-        {0, 1, 0},
-        {1, 0, 0},
-        {0, 0, 1}
-    };
-    Island(sets1, reinterpret_cast<int**>(data1), 3, 4);
-    CountOfIslands(sets1, reinterpret_cast<int**>(data1), 3, 4);
-
-    Island(sets2, reinterpret_cast<int**>(data2), 5, 3);
-    CountOfIslands(sets2, reinterpret_cast<int**>(data2), 5, 3);
-}
+#endif // !

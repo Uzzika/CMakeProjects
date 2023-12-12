@@ -1,8 +1,5 @@
 // Copyright 2023 Dudchenko Olesya
 
-#include "../lib_stack/stack.h"
-#include <iostream>
-
 #ifndef ALGORIHMSH_ALGORIHMSH_H_
 #define ALGORIHMSH_ALGORIHMSH_H_
 
@@ -16,14 +13,14 @@
 
 
 void print_menu() {
-    //std::cout << "Âàøå âûðàæåíèå: " << expr << std::endl;
-    std::cout << "Ìåíþ:" << std::endl;
-    std::cout << "  1. Çàäàòü çíà÷åíèå ïåðåìåííîé." << std::endl;
-    std::cout << "  2. Óâèäåòü îáðàòíóþ ïîëüñêóþ çàïèñü." << std::endl;
-    std::cout << "  3. Âû÷èñëèòü çíà÷åíèå ôóíêöèè." << std::endl;
-    std::cout << "  4. Âåðíóòüñÿ ê çàäàíèþ âûðàæåíèÿ." << std::endl;
-    std::cout << "  5. Âûõîä." << std::endl;
-    std::cout << "Âûáîð: ";
+    //std::cout << "Ð’Ð°ÑˆÐµ Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ðµ: " << expr << std::endl;
+    std::cout << "ÐœÐµÐ½ÑŽ:" << std::endl;
+    std::cout << "  1. Ð—Ð°Ð´Ð°Ñ‚ÑŒ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ð¿ÐµÑ€ÐµÐ¼ÐµÐ½Ð½Ð¾Ð¹." << std::endl;
+    std::cout << "  2. Ð£Ð²Ð¸Ð´ÐµÑ‚ÑŒ Ð¾Ð±Ñ€Ð°Ñ‚Ð½ÑƒÑŽ Ð¿Ð¾Ð»ÑŒÑÐºÑƒÑŽ Ð·Ð°Ð¿Ð¸ÑÑŒ." << std::endl;
+    std::cout << "  3. Ð’Ñ‹Ñ‡Ð¸ÑÐ»Ð¸Ñ‚ÑŒ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸." << std::endl;
+    std::cout << "  4. Ð’ÐµÑ€Ð½ÑƒÑ‚ÑŒÑÑ Ðº Ð·Ð°Ð´Ð°Ð½Ð¸ÑŽ Ð²Ñ‹Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ." << std::endl;
+    std::cout << "  5. Ð’Ñ‹Ñ…Ð¾Ð´." << std::endl;
+    std::cout << "Ð’Ñ‹Ð±Ð¾Ñ€: ";
 }
 
 class Parser {
@@ -88,7 +85,8 @@ public:
                     return 0;
                 }
             }
-            if (expr[i] == '<' || expr[i] == '>') {
+            if (expr[i] != '{' || expr[i] != '}' || expr[i] != '(' || 
+                expr[i] != ')' || expr[i] != '[' || expr[i] != ']') {
                 throw std::logic_error("The entered element is not a bracket!");
             }
 
@@ -97,7 +95,12 @@ public:
             return 1;
         }
         else {
-            return 0;
+            if (stack.getTop() == std::to_string('[') || stack.getTop() == std::to_string('{') || 
+            stack.getTop() == std::to_string('(') || stack.getTop() == std::to_string('}') || 
+            stack.getTop() == std::to_string('}') || stack.getTop() == std::to_string(']')) {
+                throw std::logic_error("Stack is not empty!");
+                return 0;
+            }
         }
     }
 

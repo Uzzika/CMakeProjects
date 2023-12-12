@@ -1,4 +1,4 @@
-﻿// Copyright 2023 Dudchenko Olesya
+// Copyright 2023 Dudchenko Olesya
 
 #include <iostream>
 #include <Windows.h>

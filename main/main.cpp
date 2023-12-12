@@ -41,7 +41,6 @@ int main() {
   st.push(4);
   st.print();
 
-  //DSU 
 
   return 0;
 }
