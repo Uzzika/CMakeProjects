@@ -77,10 +77,8 @@ TEST(test_ExampleClass, can_set_rand_values) {
     // Arrange
     srand(time(NULL));
     ExampleClass<int> obj(10);
-    
     // Act & Assert
     ASSERT_NO_THROW(obj.setRandValues(-100, 100));
-    
     int success = 1;
     for (int i = 0; i < obj.getSize(); i++) {
         EXPECT_LE(obj.getValue(i), 100);
