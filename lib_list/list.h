@@ -1,5 +1,7 @@
 // Copyright 2023 Dudchenko Olesya
 
+#ifndef LIB_LIST_LIST_H_
+#define LIB_LIST_LIST_H_
 #include <iostream>
 
 template <class T>
@@ -7,123 +9,76 @@ class TNode {
     T data;
     TNode* next;
 public:
-    TNode(const TNode& node) : data(node.data), next(node.next) {}
-    TNode(T _data, TNode* _next = nullptr) {
-        data = _data;
-        next = _next;
-    }
-    ~TNode() {
-        delete next;
-    }
-    std::string toString() const noexcept;
-
-    bool operator==(const TNode& n)
-    {
-        if (data == n.data) { return 1; }
-        else { return 0; }
-    }
-
-    friend std::ostream& operator<<(std::ostream& ostr, const TNode& node);
+    TNode(const TNode& node) : data(node.data), next(node.next) { }
+    explicit TNode(T _data, TNode* _next = nullptr) :
+        data(_data), next(_next) { }
+    ~TNode() { delete[] next; }
 };
+
 
 template <class T>
 class TList {
-    friend class TNode;
-    TNode* head;
-    TNode* tail;
-    int count;
+    friend class TNode<T>;
+    TNode* first;
+    TNode* last;
+
 public:
-    TList() {
-        head = nullptr;
-        tail = nullptr;
-        count = 0;
+    TList() : first(nullptr), last(nullptr) { }
+    bool isEmpty() {
+        return first == nullptr;
     }
-    TList(T* massData, int size) {
-        for (int i = size - 1; i >= 0; i--) {
-            push_front(massData[i]);
+    void pushback(T data) {
+        TNode<T>* p = new TNode<T>(data);
+        if (isEmpty()) {
+            first = p;
+            last = p;
+            return;
         }
+        last->next = p;
+        last = p;
     }
-    ~TList() {
-        delete head;
-        delete tail;
+    void print() {
+        if (isEmpty()) return;
+        TNode<T>* p = first;
+        while (p) {
+            cout << p->data << " ";
+            p = p->next;
+        }
+        cout << endl;
     }
-    void clear();
-    bool isEmpty();
-    void push_back(T data);
-    void push_front(T data);
-    void insert(TNode* p, T data);
-    void replace(TNode* p, T data);
-    void delete_elem(TNode* p);
+    TNode<T>* find(T _data) {
+        if (isEmpty()) return nullptr;
+        TNode<T>* p = first;
+        while (p && p->data != _data) p = p->next;
+        return (p && p->data != _data) ? p : nullptr;
+    }
+    void popfirst() {
+        if (isEmpty()) return;
+        TNode<T>* p = first;
+        first = p->next;
+        delete p;
+    }
+    void poplast() {
+        if (isEmpty()) return;
+        if (first == last) {
+            popfirst();
+            return;
+        }
+        TNode<T>* p = first;
+        while (p->next != last) p = p->next;
+        p->next = nullptr;
+        delete last;
+        last = p;
+    }
+    TNode<T>* operator[] (const int index) {
+        if (is_empty()) return nullptr;
+        TNode<T>* p = first;
+        for (int i = 0; i < index; i++) {
+            p = p->next;
+            if (!p) return nullptr;
+        }
+        return p;
+    }
 };
 
-template <class T>
-void TList<T>::insert(TNode<T>* p, T data) {
-    TNode* node = new;
-    TNode(data, p -> new);
-    p->next = node;
-    count++;
-    if (node->next == nullptr) {
-        tail = data;
-    }
-}
-
-template<class T>
-void TList<T>::push_front(T data) {
-    TNode* node = new TNode(data, head);
-    head = node;
-    count++;
-    if (count == 1) { tail = node; }
-}
-
-template<class T>
-void TList<T>::push_back(T data) {
-    insert(tail, data);
-}
-
-template <class T>
-void TList<T>::delete_elem(TNode<T>* p) {
-    if (p == head) {
-        if (head == nullptr) {
-            tail = nllptr;
-        }
-        head = p->next;
-        delete p;
-        return 0;
-    }
-    TNode* cur = head;
-    while (cur->next != p && cur->next != nullptr) {
-        cur = cur->next;
-        cur->next = cur->next->next;
-        delete p;
-    }
-    if (cur->next == nullptr) {
-        tail = cur;
-    }
-}
-
-template<class T>
-bool TList<T>::isEmpty() {
-    if (count == 0) { return 1; }
-    else { return 0; }
-}
-
-template<class T>
-void TList<T>::clear() {
-    while (count != 0) {
-        delete_elem(head);
-    }
-}
-
-template<class T>
-void TList<T>::replace(TNode<T>* p, T data) {
-    p = p->data;
-}
-
-template <class T>
-std::string TNode<T>::toString() const noexcept {
-    std::string str = "";
-    for (int i = 0; i < size; i++) {
-        str += std::to_string(data[i]) + "->";
-    }
-    return str;
-}
+#endif  // LIB_LIST_LIST_H_

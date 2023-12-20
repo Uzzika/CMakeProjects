@@ -9,6 +9,7 @@
 int main() {
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
+    setlocale(LC_ALL, "Russian");
     Parser exp;
     std::cin >> exp;
     system("cls");
