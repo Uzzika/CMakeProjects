@@ -1,9 +1,10 @@
-// Copyright 2023 Dudchenko Olesya
+// Copyright (c) 2023 Dudchenko Olesya Victorovna
 
 #include <iostream>
 #include <Windows.h>
 
 #include "../lib_algorithms/algorithms.h"
+#include "../lib_arithmetic/arithmetic.h"
 
 
 int main() {
