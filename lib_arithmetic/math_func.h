@@ -76,5 +76,62 @@ double m_ln(double x) {
     }
     return res;
 }
+int priority(char q){
+    int p;
+    switch (q) 
+    {
+    case '(':
+        p = 0;
+    case ')':
+        p = 1;
+    case '+':
+    case '-':
+        p = 5;
+        break;
+    case '*':
+    case '/':
+        p = 4;
+        break;
+    case '^':
+        p = 2;
+        break;
+    default:
+        break;
+    }
+    return p;
+}
+
+int poland(std::string expr) {
+    Stack<std::string> stk(expr.size());
+    std::string res, tmp;
+    for (int i = 0; i < expr.length(); i++) {
+        if (!isdigit(expr[i])) {
+            if (stk.isEmpty()) {
+                stk.push(expr[i]);
+            }
+        }
+        else if ((priority(expr[i]) >= priority(stk.getTop()))) {
+            if (expr[i] == ')') {
+                while (stk.pop() != '(') {
+                    res += stk.pop();
+                }
+                stk.pop();
+            }
+            else {
+                while (!stk.isEmpty()) {
+                    res += stk.pop();
+                }
+                stk.push(expr[i]);
+            }
+        }
+        else {
+            res += expr[i];
+        }
+    }
+    while (!stk.isEmpty()) {
+        res += stk.pop();
+    }
+    return 0;
+}
 
 #endif MATHFUNC_NATHFUNC_H_
