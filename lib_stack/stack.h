@@ -63,7 +63,6 @@ void Stack<T>::push(T elem) {
     top++;
     data[top] = elem;
 }
-
 template <typename T>
 void Stack<T>::print() {
     Stack copy(*this);
@@ -72,5 +71,47 @@ void Stack<T>::print() {
         copy.pop();
     }
 }
+
+template<typename T>
+class TDynamicStack
+{
+    int top;
+    size_t memSize;
+    T* pMem;
+
+public:
+    TDynamicStack() : top(-1), memSize(1),
+        pMem(new T[memSize]) { }
+    ~TDynamicStack() { delete[] pMem; }
+    size_t size() const { return top + 1; }
+    bool IsEmpty() const { return top == -1; }
+    T Pop() { return pMem[top--]; }
+    void Push(const T& val) {
+        if (top == memSize - 1) {
+            T* tmpMem = new T[memSize * 2];
+            std::copy(pMem, pMem + memSize, tmpMem);
+            delete[] pMem;
+            pMem = tmpMem;
+            memSize *= 2;
+        }
+        pMem[++top] = val;
+    }
+};
+
+template<typename T>
+class TVectorStack {
+    int top;
+    std::vector<T> mem;
+public:
+    TVectorStack() : top(-1) { }
+    size_t size() const { return top + 1; }
+    bool IsEmpty() const { return top == -1; }
+    void Push(const T& val) {
+        mem.push_back(val); top++;
+    }
+    T Pop() {
+        T val = mem.pop_back(); top--; return val;
+    }
+};
 
 #endif  // LIB_STACK_STACK_H_
