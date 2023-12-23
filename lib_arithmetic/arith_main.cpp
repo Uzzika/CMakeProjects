@@ -20,9 +20,15 @@ int main() {
     p.CheckSyntax();
     p.CheckFunc();
 
-    std::cout << p.CheckSyntax();
-    std::cout << p.CheckFunc();
+    if (p.CheckSyntax() == 0) {
+        std::cout << "Syntax is right\n" << std::endl;
+    }
+    if (p.CheckFunc() == 0) {
+        std::cout << "Func is right\n" << std::endl;
+    }
     system("pause");
     return 0;
 }
+
+
 
