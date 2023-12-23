@@ -15,7 +15,6 @@ public:
     ~TNode() { delete[] next; }
 };
 
-
 template <class T>
 class TList {
     friend class TNode<T>;
