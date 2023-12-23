@@ -1,11 +1,16 @@
 // Copyright (c) 2023 Dudchenko Olesya Victorovna
 
-#ifndef MATHFUNC_NATHFUNC_H_
+#ifndef MATHFUNC_MATHFUNC_H_
 #define MATHFUNC_MATHFUNC_H_
 
 #define MATH_PI 3.1415
 
 #include <iostream>
+#include <cmath>
+#include <vector>
+#include <map>
+#include "../lib_stack/stack.h"
+using namespace std;
 
 int factorial(double x) {
     int res = 1;
@@ -43,20 +48,20 @@ double m_cos(double x) {
 
 double m_tg(double x) {
     if (abs(x) >= (MATH_PI / 2)) {
-        throw std::invalid_argument("The value is invalid");
+        throw invalid_argument("The value is invalid");
     }
     if (m_cos(x) == 0) {
-        throw std::invalid_argument("Division by zero.");
+        throw invalid_argument("Division by zero.");
     }
     return (m_sin(x) / m_cos(x));
 }
 
 double m_ctg(double x) {
     if (abs(x) >= MATH_PI) {
-        throw std::invalid_argument("The value is invalid");
+        throw invalid_argument("The value is invalid");
     }
     if (m_sin(x) == 0) {
-        throw std::invalid_argument("Division by zero.");
+        throw invalid_argument("Division by zero.");
     }
     return (m_cos(x) / m_sin(x));
 }
@@ -76,62 +81,106 @@ double m_ln(double x) {
     }
     return res;
 }
-int priority(char q){
-    int p;
-    switch (q) 
-    {
-    case '(':
-        p = 0;
-    case ')':
-        p = 1;
-    case '+':
-    case '-':
-        p = 5;
-        break;
-    case '*':
-    case '/':
-        p = 4;
-        break;
-    case '^':
-        p = 2;
-        break;
-    default:
-        break;
-    }
-    return p;
-}
 
-int poland(std::string expr) {
-    Stack<std::string> stk(expr.size());
-    std::string res, tmp;
-    for (int i = 0; i < expr.length(); i++) {
-        if (!isdigit(expr[i])) {
-            if (stk.isEmpty()) {
-                stk.push(expr[i]);
-            }
-        }
-        else if ((priority(expr[i]) >= priority(stk.getTop()))) {
-            if (expr[i] == ')') {
-                while (stk.pop() != '(') {
-                    res += stk.pop();
+class TArithmeticExpression {
+    string infix;
+    string postfix;
+    vector<char> lexems;
+    map<char, double> operands;
+    map<char, int> priority;
+public:
+    TArithmeticExpression(string infx) : infix(infx)
+    {
+        priority = { {'+', 1}, {'-', 1}, {'*', 2}, {'/', 2} };
+        ToPostfix();
+    }
+    void Parse() {
+        for (char c : infix)
+            lexems.push_back(c);
+    }
+    vector<char> GetOperands() const {
+        vector<char> op;
+        for (const auto& item : operands)
+            op.push_back(item.first);
+        return op;
+    }
+    void ToPostfix() {
+        Parse();
+        TDynamicStack<char> st;
+        char stackItem;
+        for (char item : lexems) {
+            switch (item) {
+            case '(':
+                st.Push(item);
+                break;
+            case ')':
+                stackItem = st.Pop();
+                while (stackItem != '(') {
+                    postfix += stackItem;
+                    stackItem = st.Pop();
                 }
-                stk.pop();
-            }
-            else {
-                while (!stk.isEmpty()) {
-                    res += stk.pop();
+                break;
+            case '+': case '-': case '*': case '/':
+                while (!st.IsEmpty()) {
+                    stackItem = st.Pop();
+                    if (priority[item] <= priority[stackItem])
+                        postfix += stackItem;
+                    else {
+                        st.Push(stackItem);
+                        break;
+                    }
                 }
-                stk.push(expr[i]);
-            }
-        }
-        else {
-            res += expr[i];
+                st.Push(item);
+                break;
+            default:
+                operands.insert({ item, 0.0 });
+                postfix += item;
+            } // switch
+        } // for
+        while (!st.IsEmpty()) {
+            stackItem = st.Pop();
+            postfix += stackItem;
         }
     }
-    while (!stk.isEmpty()) {
-        res += stk.pop();
+    double Calculate(const map<char, double>& values) {
+        for (auto& val : values) { 
+            try {
+                operands.at(val.first) = val.second;
+            }
+            catch (out_of_range& e) {}
+        }
+        TDynamicStack<double> st;
+        double leftOperand, rightOperand;
+        for (char lexem : postfix)
+        {
+            switch (lexem)
+            {
+            case '+':
+                rightOperand = st.Pop();
+                leftOperand = st.Pop();
+                st.Push(leftOperand + rightOperand);
+                break;
+            case '-':
+                rightOperand = st.Pop();
+                leftOperand = st.Pop();
+                st.Push(leftOperand - rightOperand);
+                break;
+            case '*':
+                rightOperand = st.Pop();
+                leftOperand = st.Pop();
+                st.Push(leftOperand * rightOperand);
+                break;
+            case '/':
+                rightOperand = st.Pop();
+                leftOperand = st.Pop();
+                st.Push(leftOperand / rightOperand);
+                break;
+            default:
+                st.Push(operands[lexem]);
+            }
+        }
+        return st.Pop();
     }
-    return 0;
-}
+};
 
 #endif MATHFUNC_NATHFUNC_H_

@@ -118,10 +118,11 @@ public:
                     continue;
                 }
                 else if (lettnum.find(s) != std::string::npos) {
-                    while (lettnum.find(expr[i]) != std::string::npos) {
-                        continue;
-                    }
                     state = 1;
+                    //while (lettnum.find(expr[i]) != std::string::npos) {
+                    //    continue;
+                    //}
+                    continue;
                 }
                 else {
                     throw;
