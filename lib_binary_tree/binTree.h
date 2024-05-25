@@ -79,55 +79,50 @@ class BinaryTree {
     void remove(Node* node) {
         if (root == nullptr || node == nullptr) return;
 
-        if (root == node && root->left == nullptr && root->right == nullptr) {
-            delete root;
-            root = nullptr;
-            return;
+        Node* curParent = nullptr; // Родитель узла для удаления
+        Node* cur = root; // Узел для удаления
+
+        // Находим родителя узла для удаления
+        while (cur != nullptr && cur != node) {
+            curParent = cur;
+            if (node->data < cur->data)
+                cur = cur->left;
+            else
+                cur = cur->right;
         }
 
-        Node* deepest = nullptr;
-        Node* parentOfDeepest = nullptr;
-        Node* target = nullptr;
-        Node* parentOfTarget = nullptr;
+        if (cur == nullptr) return; // Узел для удаления не найден
 
-        TQueue<Node*> q;
-        q.push(root);
-
-        while (!q.isEmpty()) {
-            Node* temp = q.front();
-            q.pop();
-
-            if (temp == node) {
-                target = temp;
+        // Если у узла для удаления есть оба дочерних узла
+        if (cur->left != nullptr && cur->right != nullptr) {
+            Node* parent = cur;
+            Node* swap_tmp = cur->right; // Ищем самый левый узел в правом поддереве
+            while (swap_tmp->left != nullptr) {
+                parent = swap_tmp;
+                swap_tmp = swap_tmp->left;
             }
 
-            if (temp->left) {
-                parentOfDeepest = temp;
-                q.push(temp->left);
-            }
-
-            if (temp->right) {
-                parentOfDeepest = temp;
-                q.push(temp->right);
-            }
-
-            if (!q.isEmpty()) {
-                deepest = temp;
-            }
+            // Копируем данные из swap_tmp в cur
+            cur->data = swap_tmp->data;
+            cur = swap_tmp;
+            curParent = parent;
         }
 
-        if (target) {
-            target->data = deepest->data;
+        // У узла для удаления есть только один или ни одного дочернего узла
+        Node* child = (cur->left != nullptr) ? cur->left : cur->right;
 
-            if (parentOfDeepest->left == deepest) {
-                parentOfDeepest->left = nullptr;
-            }
-            else {
-                parentOfDeepest->right = nullptr;
-            }
-
-            delete deepest;
+        // Если у узла для удаления есть только один дочерний узел или у него его вообще нет
+        if (curParent == nullptr) {
+            root = child;
         }
+        else if (curParent->left == cur) {
+            curParent->left = child;
+        }
+        else {
+            curParent->right = child;
+        }
+
+        delete cur;
     }
 
 public:
@@ -169,7 +164,6 @@ private:
             root->right = removeNode(root->right, node);
         }
         else {
-            // Узел найден
             if (root->left == nullptr) {
                 Node* temp = root->right;
                 delete root;
@@ -194,6 +188,7 @@ private:
             current = current->left;
         return current;
     }
+
 
     // Рекурсивные функции для обходов DFS
     void dfsInOrderRec(Node* node, void(*func)(Node*)) { // сложность по времени O(n), сложность по памяти O(h) - длина дерева
