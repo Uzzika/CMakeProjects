@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Dudchenko Olesya Victorovna
+// Copyright (c) 2024 Dudchenko Olesya Victorovna
 
 #ifndef BINTREE_BINTREE_H_
 #define BINTREE_BINTREE_H_
@@ -11,12 +11,12 @@ using namespace std;
 
 struct Node {
     int data;
-    Node *left, *right;
-    //конструктор, который инициализирует узел заданным значением и устанавливает дочерние узлы в nullptr
+    Node* left, * right;
+    //  онструктор, который инициализирует узел заданным значением и устанавливает дочерние узлы в nullptr
     Node(int value) : data(value), left(nullptr), right(nullptr) {}
 };
 
-//функци€ дл€ создани€ узла с указанными значением и дочерними узлами
+// ‘ункци€ дл€ создани€ узла с указанными значением и дочерними узлами
 Node* create(int value, Node* l = nullptr, Node* r = nullptr) {
     Node* node = new Node(value);
     node->left = l;
@@ -27,25 +27,25 @@ Node* create(int value, Node* l = nullptr, Node* r = nullptr) {
 class BinaryTree {
     Node* root;
 
- public:
+public:
     BinaryTree() : root(nullptr) {}
 
-    void insert(int value){
+    void insert(int value) {
         Node* newNode = new Node(value);
         if (!root) {
             root = newNode;
             return;
         }
 
-        TQueue <Node*> q;//создаЄтс€ очередь q, содержаща€ указатели на узлы дерева
+        TQueue <Node*> q; // —оздаЄтс€ очередь q, содержаща€ указатели на узлы дерева
         q.push(root);
 
         while (!q.isEmpty()) {
             Node* current = q.front();
             q.pop();
 
-            //ѕровер€етс€, есть ли у текущего узла левый потомок. ≈сли нет, 
-            //новый узел становитс€ его левым потомком, и функци€ завершаетс€
+            // ѕровер€етс€, есть ли у текущего узла левый потомок. ≈сли нет, 
+            // новый узел становитс€ его левым потомком, и функци€ завершаетс€
             if (!current->left) {
                 current->left = newNode;
                 return;
@@ -165,7 +165,7 @@ class BinaryTree {
     }
 
 public:
-    void BFS(void(*func) (Node*)) { // сложность по времени O(n), сложность по пам€ти O(2^n)
+    void BFS(void(*func)(Node*)) { // сложность по времени O(n), сложность по пам€ти O(2^n)
         if (root == nullptr) return;
         TQueue <Node*> q;
         q.push(root); //первый элемент
@@ -195,7 +195,7 @@ public:
     int height() {
         return heightRec(root);
     }
-    
+
     int getLevel(Node* node) {
         return getLevelRec(root, node, 1);
     }
@@ -208,7 +208,8 @@ private:
     // –екурсивные функции дл€ обходов DFS
     void dfsInOrderRec(Node* node, void(*func)(Node*)) { // сложность по времени O(n), сложность по пам€ти O(h) - длина дерева
         if (node == nullptr) return;
-        dfsInOrderRec(node->left, func);
+        dfsInOrderRec(node->left, func
+        );
         func(node);
         dfsInOrderRec(node->right, func);
     }
