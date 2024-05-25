@@ -6,6 +6,8 @@
 #include <iostream>
 #include "../lib_queue/TQueue.h"
 #include "../lib_stack/stack.h"
+#include <vector>
+using namespace std;
 
 struct Node {
     int data;
@@ -79,8 +81,8 @@ class BinaryTree {
     void remove(Node* node) {
         if (root == nullptr || node == nullptr) return;
 
-        Node* curParent = nullptr; // –одитель узла дл€ удалени€
-        Node* cur = root; // ”зел дл€ удалени€
+        Node* curParent = nullptr;
+        Node* cur = root;
 
         // Ќаходим родител€ узла дл€ удалени€
         while (cur != nullptr && cur != node) {
@@ -125,6 +127,43 @@ class BinaryTree {
         delete cur;
     }
 
+    Node* getRoot() const {
+        return root;
+    }
+
+    void printTreeByLevels(Node* root) {
+        if (!root) return;
+
+        TQueue<Node*> q;
+        q.push(root);
+
+        while (!q.isEmpty()) {
+            int levelSize = q.getSize(); // количество узлов на текущем уровне
+            std::vector<int> levelNodes;
+
+            // обработка всех узлов текущего уровн€
+            for (int i = 0; i < levelSize; ++i) {
+                Node* currentNode = q.front();
+                q.pop();
+                levelNodes.push_back(currentNode->data);
+
+                // добавление дочерних узлов в очередь
+                if (currentNode->left) {
+                    q.push(currentNode->left);
+                }
+                if (currentNode->right) {
+                    q.push(currentNode->right);
+                }
+            }
+
+            // печать узлов текущего уровн€
+            for (int val : levelNodes) {
+                std::cout << val << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
 public:
     void BFS(void(*func) (Node*)) { // сложность по времени O(n), сложность по пам€ти O(2^n)
         if (root == nullptr) return;
@@ -153,43 +192,19 @@ public:
         dfsPostOrderRec(root, func);
     }
 
+    int height() {
+        return heightRec(root);
+    }
+    
+    int getLevel(Node* node) {
+        return getLevelRec(root, node, 1);
+    }
+
+    int size() {
+        return sizeRec(root);
+    }
+
 private:
-    Node* removeNode(Node* root, Node* node) {
-        if (root == nullptr) return root;
-
-        if (node->data < root->data) {
-            root->left = removeNode(root->left, node);
-        }
-        else if (node->data > root->data) {
-            root->right = removeNode(root->right, node);
-        }
-        else {
-            if (root->left == nullptr) {
-                Node* temp = root->right;
-                delete root;
-                return temp;
-            }
-            else if (root->right == nullptr) {
-                Node* temp = root->left;
-                delete root;
-                return temp;
-            }
-
-            Node* temp = minValueNode(root->right);
-            root->data = temp->data;
-            root->right = removeNode(root->right, temp);
-        }
-        return root;
-    }
-
-    Node* minValueNode(Node* node) {
-        Node* current = node;
-        while (current && current->left != nullptr)
-            current = current->left;
-        return current;
-    }
-
-
     // –екурсивные функции дл€ обходов DFS
     void dfsInOrderRec(Node* node, void(*func)(Node*)) { // сложность по времени O(n), сложность по пам€ти O(h) - длина дерева
         if (node == nullptr) return;
@@ -210,6 +225,36 @@ private:
         dfsPostOrderRec(node->left, func);
         dfsPostOrderRec(node->right, func);
         func(node);
+    }
+
+    int heightRec(Node* node) {
+        if (node == nullptr) {
+            return 0;
+        }
+        int leftHeight = heightRec(node->left);
+        int rightHeight = heightRec(node->right);
+        return max(leftHeight, rightHeight) + 1;
+    }
+
+    int getLevelRec(Node* current, Node* target, int level) {
+        if (current == nullptr) {
+            return 0;
+        }
+        if (current == target) {
+            return level;
+        }
+        int downLevel = getLevelRec(current->left, target, level + 1);
+        if (downLevel != 0) {
+            return downLevel;
+        }
+        return getLevelRec(current->right, target, level + 1);
+    }
+
+    int sizeRec(Node* node) {
+        if (node == nullptr) {
+            return 0;
+        }
+        return sizeRec(node->left) + 1 + sizeRec(node->right);
     }
 };
 

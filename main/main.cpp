@@ -44,6 +44,7 @@ int main() {
 
 
   BinaryTree tree;
+
   tree.insert(5);
   tree.insert(3);
   tree.insert(7);
@@ -51,17 +52,35 @@ int main() {
   tree.insert(4);
   tree.insert(6);
   tree.insert(8);
+  tree.insert(10);
+  tree.insert(15);
+  tree.insert(2);
+  tree.insert(18);
 
   std::cout << "BFS before removal: ";
   tree.BFS(printNode);
   std::cout << std::endl;
 
-  Node* nodeToRemove = tree.find(3);
-  tree.remove(nodeToRemove);
+  Node* node = tree.find(3);
+  if (node) {
+      tree.remove(node);
+  }
 
   std::cout << "BFS after removal: ";
   tree.BFS(printNode);
   std::cout << std::endl;
+
+  std::cout << "Tree height: " << tree.height() << std::endl;
+
+  Node* levelNode = tree.find(6);
+  if (levelNode) {
+      std::cout << "Level of node with value 6: " << tree.getLevel(levelNode) << std::endl;
+  }
+
+  std::cout << "Size of the tree: " << tree.size() << std::endl;
+
+  std::cout << "Tree structure by levels:" << std::endl;
+  tree.printTreeByLevels(tree.getRoot());
 
   return 0;
 }
