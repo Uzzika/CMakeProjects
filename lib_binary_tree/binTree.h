@@ -17,12 +17,12 @@ struct Node {
     int data;
     Node* left, * right;
 
-    // Конструктор, который инициализирует узел заданным значением 
-    //и устанавливает дочерние узлы в nullptr
+    // Constructor that initializes a node with a given value
+    // and sets the child nodes to nullptr
     explicit Node(int value) : data(value), left(nullptr), right(nullptr) {}
 };
 
-// Функция для создания узла с указанными значением и дочерними узлами
+// Function to create a node with specified value and child nodes
 Node* create(int value, Node* l = nullptr, Node* r = nullptr) {
     Node* node = new Node(value);
     node->left = l;
@@ -43,16 +43,15 @@ public:
             return;
         }
 
-        TQueue<Node*> q;  // Создаётся очередь q, содержащая указатели на узлы 
-        //дерева
+        TQueue<Node*> q;  // Create a queue q containing pointers to tree nodes
         q.push(root);
 
         while (!q.isEmpty()) {
             Node* current = q.front();
             q.pop();
 
-            // Проверяется, есть ли у текущего узла левый потомок. Если нет,
-            // новый узел становится его левым потомком, и функция завершается
+            // Check if the current node has a left child. If not,
+            // the new node becomes its left child, and the function terminates
             if (!current->left) {
                 current->left = newNode;
                 return;
@@ -81,7 +80,6 @@ public:
             if (current->left) q.push(current->left);
             if (current->right) q.push(current->right);
         }
-
         return nullptr;
     }
 
@@ -91,7 +89,7 @@ public:
         Node* curParent = nullptr;
         Node* cur = root;
 
-        // Находим родителя узла для удаления
+        // Find the parent of the node to be removed
         while (cur != nullptr && cur != node) {
             curParent = cur;
             if (node->data < cur->data) {
@@ -102,28 +100,29 @@ public:
             }
         }
 
-        if (cur == nullptr) return;  // Узел для удаления не найден
+        if (cur == nullptr) return;  // Node to be removed not found
 
-        // Если у узла для удаления есть оба дочерних узла
+        // If the node to be removed has both child nodes
         if (cur->left != nullptr && cur->right != nullptr) {
             Node* parent = cur;
-            Node* swap_tmp = cur->right;  // Ищем самый левый узел в правом поддереве
+            Node* swap_tmp = cur->right;  // Find the leftmost node in
+            // the right subtree
             while (swap_tmp->left != nullptr) {
                 parent = swap_tmp;
                 swap_tmp = swap_tmp->left;
             }
 
-            // Копируем данные из swap_tmp в cur
+            // Copy data from swap_tmp to cur
             cur->data = swap_tmp->data;
             cur = swap_tmp;
             curParent = parent;
         }
 
-        // У узла для удаления есть только один или ни одного дочернего узла
+        // The node to be removed has only one or no child nodes
         Node* child = (cur->left != nullptr) ? cur->left : cur->right;
 
-        // Если у узла для удаления есть только один дочерний узел 
-        // или у него его вообще нет
+        // If the node to be removed has only one child node
+        // or has none
         if (curParent == nullptr) {
             root = child;
         }
@@ -148,16 +147,16 @@ public:
         q.push(root);
 
         while (!q.isEmpty()) {
-            int levelSize = q.getSize();  // Количество узлов на текущем уровне
+            int levelSize = q.getSize();  // Number of nodes at the current level
             std::vector<int> levelNodes;
 
-            // Обработка всех узлов текущего уровня
+            // Process all nodes at the current level
             for (int i = 0; i < levelSize; ++i) {
                 Node* currentNode = q.front();
                 q.pop();
                 levelNodes.push_back(currentNode->data);
 
-                // Добавление дочерних узлов в очередь
+                // Add child nodes to the queue
                 if (currentNode->left) {
                     q.push(currentNode->left);
                 }
@@ -166,7 +165,7 @@ public:
                 }
             }
 
-            // Печать узлов текущего уровня
+            // Print nodes at the current level
             for (int val : levelNodes) {
                 cout << val << " ";
             }
@@ -175,11 +174,11 @@ public:
     }
 
 public:
-    void BFS(void (*func)(Node*)) {  // Сложность по времени O(n)
-    // сложность по памяти O(2^n)
+    void BFS(void (*func)(Node*)) {  // Time complexity O(n)
+        // Memory complexity O(2^n)
         if (root == nullptr) return;
         TQueue<Node*> q;
-        q.push(root);  // Первый элемент
+        q.push(root);  // First element
         while (!q.isEmpty()) {
             Node* cur = q.front();
             q.pop();
@@ -216,9 +215,9 @@ public:
     }
 
 private:
-    // Рекурсивные функции для обходов DFS
-    void dfsInOrderRec(Node* node, void (*func)(Node*)) {  // Сложность по 
-    // времени O(n), сложность по памяти O(h) - длина дерева
+    // Recursive functions for DFS traversals
+    void dfsInOrderRec(Node* node, void (*func)(Node*)) {  // Time complexity O(n)
+        // Memory complexity O(h) - tree height
         if (node == nullptr) return;
         dfsInOrderRec(node->left, func);
         func(node);

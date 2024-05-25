@@ -8,7 +8,7 @@
 
 template <typename T>
 class Stack {
-public:
+ public:
     explicit Stack(int size = 10) : size(size), top(-1) {
         data = new T[size];
     }
@@ -42,7 +42,7 @@ public:
         return top == -1;
     }
 
-private:
+ private:
     T* data;
     int size;
     int top;
@@ -50,7 +50,7 @@ private:
 
 template <typename T>
 class TDynamicStack {
-public:
+ public:
     TDynamicStack() : data(nullptr), size(0), capacity(0) {}
 
     void push(const T& value) {
@@ -78,7 +78,7 @@ public:
         return size == 0;
     }
 
-private:
+ private:
     void resize() {
         capacity = (capacity == 0) ? 1 : capacity * 2;
         T* newData = new T[capacity];
