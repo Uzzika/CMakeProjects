@@ -1,95 +1,139 @@
-// Copyright 2024 Dudchenko Olesya
-
 #ifndef LIB_STACK_STACK_H_
 #define LIB_STACK_STACK_H_
 
-#include <algorithm>
 #include <iostream>
 
 template <typename T>
 class Stack {
- public:
-    explicit Stack(int size = 10) : size(size), top(-1) {
+    int size;
+    T* data;
+    int top;
+public:
+    Stack(int size_) {
+        size = size_;
+        top = -1;
         data = new T[size];
     }
-
+    Stack(const Stack& st) {
+        size = st.size;
+        top = st.top;
+        data = new T[size];
+        for (int i = 0; i < size; i += 1) {
+            data[i] = st.data[i];
+        }
+    }
     ~Stack() {
-        delete[] data;
+        delete[]data;
+        data = nullptr;
     }
+    bool isEmpty();
+    bool isFull();
+    T& getTop();
+    void pop();
+    void push(T elem);
 
-    void push(const T& value) {
-        if (top == size - 1) {
-            throw std::overflow_error("Stack overflow");
-        }
-        data[++top] = value;
-    }
-
-    T pop() {
-        if (top == -1) {
-            throw std::underflow_error("Stack underflow");
-        }
-        return data[top--];
-    }
-
-    T peek() const {
-        if (top == -1) {
-            throw std::underflow_error("Stack underflow");
-        }
-        return data[top];
-    }
-
-    bool isEmpty() const {
-        return top == -1;
-    }
-
- private:
-    T* data;
-    int size;
-    int top;
+    void print();
 };
-
 template <typename T>
-class TDynamicStack {
- public:
-    TDynamicStack() : data(nullptr), size(0), capacity(0) {}
+bool Stack<T>::isEmpty() {
+    return top == -1;
+}
+template <typename T>
+bool Stack<T>::isFull() {
+    return size == top + 1;
+}
+template <typename T>
+T& Stack<T>::getTop() {
+    return data[top];
+}
+template <typename T>
+void Stack<T>::pop() {
+    if (isEmpty()) {
+        throw std::logic_error("Stack is empty!");
+    }
+    top--;
+}
+template <typename T>
+void Stack<T>::push(T elem) {
+    if (isFull()) {
+        throw std::logic_error("Stack is full!");
+    }
+    top++;
+    data[top] = elem;
+}
+template <typename T>
+void Stack<T>::print() {
+    Stack copy(*this);
+    while (!copy.isEmpty()) {
+        std::cout << copy.getTop() << '\n';
+        copy.pop();
+    }
+}
 
-    void push(const T& value) {
-        if (size == capacity) {
-            resize();
+template<typename T>
+class TDynamicStack
+{
+    int top;
+    size_t memSize;
+    T* pMem;
+
+public:
+    TDynamicStack() : top(-1), memSize(1),
+        pMem(new T[memSize]) { }
+    ~TDynamicStack() { delete[] pMem; }
+    size_t size() const { return top + 1; }
+    bool IsEmpty() const { return top == -1; }
+    T Pop() { return pMem[top--]; }
+    void Push(const T& val) {
+        if (top == memSize - 1) {
+            T* tmpMem = new T[memSize * 2];
+            std::copy(pMem, pMem + memSize, tmpMem);
+            delete[] pMem;
+            pMem = tmpMem;
+            memSize *= 2;
         }
-        data[size++] = value;
+        pMem[++top] = val;
     }
-
-    T pop() {
-        if (size == 0) {
-            throw std::underflow_error("Stack underflow");
-        }
-        return data[--size];
-    }
-
-    T peek() const {
-        if (size == 0) {
-            throw std::underflow_error("Stack underflow");
-        }
-        return data[size - 1];
-    }
-
-    bool isEmpty() const {
-        return size == 0;
-    }
-
- private:
-    void resize() {
-        capacity = (capacity == 0) ? 1 : capacity * 2;
-        T* newData = new T[capacity];
-        std::copy(data, data + size, newData);
-        delete[] data;
-        data = newData;
-    }
-
-    T* data;
-    int size;
-    int capacity;
 };
+
+//template<typename T>
+//class TVectorStack {
+//    int top;
+//    std::vector<T> mem;
+//public:
+//    TVectorStack() : top(-1) { }
+//    size_t size() const { return top + 1; }
+//    bool IsEmpty() const { return top == -1; }
+//    void Push(const T& val) {
+//        mem.push_back(val); top++;
+//    }
+//    T Pop() {
+//        T val = mem.pop_back(); top--; return val;
+//    }
+//};
+//
+//template<class T>
+//class StackOnList {
+//    TList<T> data;
+//public:
+//    StackOnList() :data() {}
+//    StackOnList(const StackOnList& st) :data(st.data) {}
+//    StackOnList(T* data, int mass_size) : data(data, mass_size) {}
+//    ~StackOnList() {}
+//
+//    bool empty() { return data.empty(); }
+//    T top() {
+//        if (data.empty()) { throw std::logic_error("stack is empty"); }
+//        return data.front();
+//    }
+//    T pop() {
+//        if (data.empty()) { return NULL; }
+//        T res = top();
+//        data.pop_front();
+//        return res;
+//    }
+//    void push(const T& elem) { data.push_front(elem); }
+//    size_t size() { return data.size(); }
+//};
 
 #endif  // LIB_STACK_STACK_H_

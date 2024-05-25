@@ -1,51 +1,78 @@
-#ifndef LIB_QUEUE_TQUEUE_H_
-#define LIB_QUEUE_TQUEUE_H_
+#ifndef TQUEUE_TQUEUE_H_
+#define TQUEUE_TQUEUE_H_
 
-#include <queue>
-#include <stdexcept>
+#include <iostream>
+#include "../lib_stack/stack.h"
 
-template <typename T>
+template <class T>
 class TQueue {
-private:
-    std::queue<T> q;
+    size_t size;
+    size_t currentSize;
+    Stack<T>* data;
 
 public:
-    TQueue() = default;
+    TQueue() : size(100), currentSize(0), data(new Stack<T>(100)) {}
+    explicit TQueue(size_t size_) : size(size_), currentSize(0), data(new Stack<T>(size_)) {}
 
-    explicit TQueue(const std::queue<T>& queue) : q(queue) {}
-
-    void push(const T& value) {
-        q.push(value);
-    }
-
-    void pop() {
-        if (q.empty()) {
-            throw std::out_of_range("Queue is empty");
-        }
-        q.pop();
-    }
-
-    T& front() {
-        if (q.empty()) {
-            throw std::out_of_range("Queue is empty");
-        }
-        return q.front();
-    }
-
-    const T& front() const {
-        if (q.empty()) {
-            throw std::out_of_range("Queue is empty");
-        }
-        return q.front();
+    ~TQueue() {
+        delete data;
     }
 
     bool isEmpty() const {
-        return q.empty();
+        return data->isEmpty();
     }
 
-    int getSize() const {
-        return q.size();
+    bool isFull() const {
+        return currentSize == size;
+    }
+
+    void push(T val) {
+        if (!isFull()) {
+            data->push(val);
+            currentSize++;
+        }
+        else {
+            throw std::runtime_error("Queue is full");
+        }
+    }
+
+    T pop() {
+        if (isEmpty()) {
+            throw std::runtime_error("Queue is empty");
+        }
+        T value = data->getTop();
+        data->pop();
+        currentSize--;
+        return value;
+    }
+
+    void clear() {
+        while (!isEmpty()) {
+            pop();
+        }
+    }
+
+    size_t getSize() const {
+        return currentSize;
+    }
+
+    T front() const {
+        if (!isEmpty()) {
+            return data->getTop();
+        }
+        else {
+            throw std::runtime_error("Queue is empty");
+        }
+    }
+
+    void print() const {
+        Stack<T>* temp = new Stack<T>(*data);
+        while (!temp->isEmpty()) {
+            std::cout << temp->pop() << " ";
+        }
+        std::cout << std::endl;
+        delete temp;
     }
 };
 
-#endif  // LIB_QUEUE_TQUEUE_H_
+#endif // TQUEUE_TQUEUE_H_

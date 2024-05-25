@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Dudchenko Olesya Victorovna 
+// Copyright (c) 2023 Dudchenko Olesya Victorovna
 
 #include <iostream>
 #include <Windows.h>

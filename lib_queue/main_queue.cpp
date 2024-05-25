@@ -1,7 +1,7 @@
 // Copyright 2024 Dudchenko Olesya
 
 #include <iostream>
-#include "TQueue.h"
+#include "../lib_queue/TQueue.h"
 
 int main() {
     TQueue<int> q(5);

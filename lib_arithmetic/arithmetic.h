@@ -1,7 +1,7 @@
 // Copyright (c) 2023 Dudchenko Olesya Victorovna
 
-#ifndef LIB_ALGORIHMSH_ALGORIHMSH_H_
-#define LIB_ALGORIHMSH_ALGORIHMSH_H_
+#ifndef LIB_ARITHMETIC_ARITHMETIC_H_
+#define LIB_ARITHMETIC_ARITHMETIC_H_
 
 #include <algorithm>
 #include <exception>
@@ -238,4 +238,4 @@ public:
 
 };
 
-#endif LIB_ALGORIHMSH_ALGORIHMSH_H_
+#endif LIB_ARITHMETIC_ARITHMETIC_H_
