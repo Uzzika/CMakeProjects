@@ -22,7 +22,7 @@ add_subdirectory(lib_polynomials)
 add_subdirectory(lib_binary_tree)
 add_subdirectory(lib_unorderedtable)
 add_subdirectory(lib_vector)
-add_subdirectory(lib_pars)
+add_subdirectory(lib_trees)
 add_subdirectory(main)           # подключаем дополнительный CMakeLists.txt из подкаталога с именем main
 
 option(BTEST "build test?" ON)   # указываем подключаем ли google-тесты (ON или YES) или нет (OFF или NO)
