@@ -74,10 +74,16 @@ class UnorderedTableOnList : public ITable<TKey, TValue> {
     List < TPair < TKey, TValue>> data;
 public:
     UnorderedTableOnList() = default;
-    void remove(TKey K) {
-    TNode<>*
-    pos = find(K);
-    if (pos != nullptr) { data.erose(pos); }
-    }
-    TValue& find(const TKey)
+    /*void remove(TKey K) {
+        TNode<>*
+        pos = find(K);
+        if (pos != nullptr) { data.erose(pos); }
+        }
+    TValue& find(const TKey) {
+        TNode cur(data.f);
+        while (cur != nullptr) {
+            if (cur.data == K) { return cur.data}
+        }
+        cur = cur.n
+    }*/
 };
