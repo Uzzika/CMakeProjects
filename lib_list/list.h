@@ -6,9 +6,10 @@
 
 template <class T>
 class TNode {
+public:
     T data;
     TNode* next;
-public:
+
     TNode(const TNode& node) : data(node.data), next(node.next) { }
     explicit TNode(T _data, TNode* _next = nullptr) :
         data(_data), next(_next) { }

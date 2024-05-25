@@ -5,6 +5,7 @@
 #include "../lib_stack/stack.h"
 #include "../lib_algorithms/algorithms.h"
 #include "../lib_dsu/dsu.h"
+#include "../lib_binary_tree/binTree.h"
 
 int main() {
   int a = 1, b = 4; 
@@ -41,6 +42,26 @@ int main() {
   st.push(4);
   st.print();
 
+
+  BinaryTree tree;
+  tree.insert(5);
+  tree.insert(3);
+  tree.insert(7);
+  tree.insert(2);
+  tree.insert(4);
+  tree.insert(6);
+  tree.insert(8);
+
+  std::cout << "BFS before removal: ";
+  tree.BFS(printNode);
+  std::cout << std::endl;
+
+  Node* nodeToRemove = tree.find(3);
+  tree.remove(nodeToRemove);
+
+  std::cout << "BFS after removal: ";
+  tree.BFS(printNode);
+  std::cout << std::endl;
 
   return 0;
 }

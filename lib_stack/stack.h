@@ -1,4 +1,4 @@
-// Copyright 2023 Dudchenko Olesya
+// Copyright 2024 Dudchenko Olesya
 
 #ifndef LIB_STACK_STACK_H_
 #define LIB_STACK_STACK_H_
@@ -98,20 +98,44 @@ public:
     }
 };
 
-template<typename T>
-class TVectorStack {
-    int top;
-    std::vector<T> mem;
-public:
-    TVectorStack() : top(-1) { }
-    size_t size() const { return top + 1; }
-    bool IsEmpty() const { return top == -1; }
-    void Push(const T& val) {
-        mem.push_back(val); top++;
-    }
-    T Pop() {
-        T val = mem.pop_back(); top--; return val;
-    }
-};
+//template<typename T>
+//class TVectorStack {
+//    int top;
+//    std::vector<T> mem;
+//public:
+//    TVectorStack() : top(-1) { }
+//    size_t size() const { return top + 1; }
+//    bool IsEmpty() const { return top == -1; }
+//    void Push(const T& val) {
+//        mem.push_back(val); top++;
+//    }
+//    T Pop() {
+//        T val = mem.pop_back(); top--; return val;
+//    }
+//};
+//
+//template<class T>
+//class StackOnList {
+//    TList<T> data;
+//public:
+//    StackOnList() :data() {}
+//    StackOnList(const StackOnList& st) :data(st.data) {}
+//    StackOnList(T* data, int mass_size) : data(data, mass_size) {}
+//    ~StackOnList() {}
+//
+//    bool empty() { return data.empty(); }
+//    T top() {
+//        if (data.empty()) { throw std::logic_error("stack is empty"); }
+//        return data.front();
+//    }
+//    T pop() {
+//        if (data.empty()) { return NULL; }
+//        T res = top();
+//        data.pop_front();
+//        return res;
+//    }
+//    void push(const T& elem) { data.push_front(elem); }
+//    size_t size() { return data.size(); }
+//};
 
 #endif  // LIB_STACK_STACK_H_
