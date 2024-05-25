@@ -1,19 +1,25 @@
-// Copyright (c) 2024 Dudchenko Olesya Victorovna
+// Copyright 2024 Dudchenko Olesya
 
-#ifndef BINTREE_BINTREE_H_
-#define BINTREE_BINTREE_H_
+#ifndef LIB_BINARY_TREE_BINTREE_H_
+#define LIB_BINARY_TREE_BINTREE_H_
 
 #include <iostream>
+#include <algorithm>
+#include <vector>
 #include "../lib_queue/TQueue.h"
 #include "../lib_stack/stack.h"
-#include <vector>
-using namespace std;
+
+using std::max;
+using std::cout;
+using std::endl;
 
 struct Node {
     int data;
     Node* left, * right;
-    // Конструктор, который инициализирует узел заданным значением и устанавливает дочерние узлы в nullptr
-    Node(int value) : data(value), left(nullptr), right(nullptr) {}
+
+    // Конструктор, который инициализирует узел заданным значением 
+    //и устанавливает дочерние узлы в nullptr
+    explicit Node(int value) : data(value), left(nullptr), right(nullptr) {}
 };
 
 // Функция для создания узла с указанными значением и дочерними узлами
@@ -37,14 +43,15 @@ public:
             return;
         }
 
-        TQueue <Node*> q; // Создаётся очередь q, содержащая указатели на узлы дерева
+        TQueue<Node*> q;  // Создаётся очередь q, содержащая указатели на узлы 
+        //дерева
         q.push(root);
 
         while (!q.isEmpty()) {
             Node* current = q.front();
             q.pop();
 
-            // Проверяется, есть ли у текущего узла левый потомок. Если нет, 
+            // Проверяется, есть ли у текущего узла левый потомок. Если нет,
             // новый узел становится его левым потомком, и функция завершается
             if (!current->left) {
                 current->left = newNode;
@@ -62,7 +69,7 @@ public:
                 q.push(current->right);
             }
         }
-    };
+    }
 
     Node* find(int value) {
         TQueue<Node*> q;
@@ -87,18 +94,20 @@ public:
         // Находим родителя узла для удаления
         while (cur != nullptr && cur != node) {
             curParent = cur;
-            if (node->data < cur->data)
+            if (node->data < cur->data) {
                 cur = cur->left;
-            else
+            }
+            else {
                 cur = cur->right;
+            }
         }
 
-        if (cur == nullptr) return; // Узел для удаления не найден
+        if (cur == nullptr) return;  // Узел для удаления не найден
 
         // Если у узла для удаления есть оба дочерних узла
         if (cur->left != nullptr && cur->right != nullptr) {
             Node* parent = cur;
-            Node* swap_tmp = cur->right; // Ищем самый левый узел в правом поддереве
+            Node* swap_tmp = cur->right;  // Ищем самый левый узел в правом поддереве
             while (swap_tmp->left != nullptr) {
                 parent = swap_tmp;
                 swap_tmp = swap_tmp->left;
@@ -113,7 +122,8 @@ public:
         // У узла для удаления есть только один или ни одного дочернего узла
         Node* child = (cur->left != nullptr) ? cur->left : cur->right;
 
-        // Если у узла для удаления есть только один дочерний узел или у него его вообще нет
+        // Если у узла для удаления есть только один дочерний узел 
+        // или у него его вообще нет
         if (curParent == nullptr) {
             root = child;
         }
@@ -138,16 +148,16 @@ public:
         q.push(root);
 
         while (!q.isEmpty()) {
-            int levelSize = q.getSize(); // количество узлов на текущем уровне
+            int levelSize = q.getSize();  // Количество узлов на текущем уровне
             std::vector<int> levelNodes;
 
-            // обработка всех узлов текущего уровня
+            // Обработка всех узлов текущего уровня
             for (int i = 0; i < levelSize; ++i) {
                 Node* currentNode = q.front();
                 q.pop();
                 levelNodes.push_back(currentNode->data);
 
-                // добавление дочерних узлов в очередь
+                // Добавление дочерних узлов в очередь
                 if (currentNode->left) {
                     q.push(currentNode->left);
                 }
@@ -156,19 +166,20 @@ public:
                 }
             }
 
-            // печать узлов текущего уровня
+            // Печать узлов текущего уровня
             for (int val : levelNodes) {
-                std::cout << val << " ";
+                cout << val << " ";
             }
-            std::cout << std::endl;
+            cout << endl;
         }
     }
 
 public:
-    void BFS(void(*func)(Node*)) { // сложность по времени O(n), сложность по памяти O(2^n)
+    void BFS(void (*func)(Node*)) {  // Сложность по времени O(n)
+    // сложность по памяти O(2^n)
         if (root == nullptr) return;
-        TQueue <Node*> q;
-        q.push(root); //первый элемент
+        TQueue<Node*> q;
+        q.push(root);  // Первый элемент
         while (!q.isEmpty()) {
             Node* cur = q.front();
             q.pop();
@@ -180,15 +191,15 @@ public:
         }
     }
 
-    void dfsInOrder(void(*func)(Node*)) {
+    void dfsInOrder(void (*func)(Node*)) {
         dfsInOrderRec(root, func);
     }
 
-    void dfsPreOrder(void(*func)(Node*)) {
+    void dfsPreOrder(void (*func)(Node*)) {
         dfsPreOrderRec(root, func);
     }
 
-    void dfsPostOrder(void(*func)(Node*)) {
+    void dfsPostOrder(void (*func)(Node*)) {
         dfsPostOrderRec(root, func);
     }
 
@@ -206,22 +217,22 @@ public:
 
 private:
     // Рекурсивные функции для обходов DFS
-    void dfsInOrderRec(Node* node, void(*func)(Node*)) { // сложность по времени O(n), сложность по памяти O(h) - длина дерева
+    void dfsInOrderRec(Node* node, void (*func)(Node*)) {  // Сложность по 
+    // времени O(n), сложность по памяти O(h) - длина дерева
         if (node == nullptr) return;
-        dfsInOrderRec(node->left, func
-        );
+        dfsInOrderRec(node->left, func);
         func(node);
         dfsInOrderRec(node->right, func);
     }
 
-    void dfsPreOrderRec(Node* node, void(*func)(Node*)) {
+    void dfsPreOrderRec(Node* node, void (*func)(Node*)) {
         if (node == nullptr) return;
         func(node);
         dfsPreOrderRec(node->left, func);
         dfsPreOrderRec(node->right, func);
     }
 
-    void dfsPostOrderRec(Node* node, void(*func)(Node*)) {
+    void dfsPostOrderRec(Node* node, void (*func)(Node*)) {
         if (node == nullptr) return;
         dfsPostOrderRec(node->left, func);
         dfsPostOrderRec(node->right, func);
@@ -261,8 +272,8 @@ private:
 
 void printNode(Node* node) {
     if (node) {
-        std::cout << node->data << " ";
+        cout << node->data << " ";
     }
 }
 
-#endif // BINTREE_BINTREE_H_
+#endif  // LIB_BINARY_TREE_BINTREE_H_

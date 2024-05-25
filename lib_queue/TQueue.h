@@ -1,78 +1,61 @@
-#ifndef TQUEUE_TQUEUE_H_
-#define TQUEUE_TQUEUE_H_
+// Copyright 2024 Dudchenko Olesya
+
+#ifndef LIB_QUEUE_TQUEUE_H_
+#define LIB_QUEUE_TQUEUE_H_
 
 #include <iostream>
-#include "../lib_stack/stack.h"
 
-template <class T>
+template <typename T>
 class TQueue {
-    size_t size;
-    size_t currentSize;
-    Stack<T>* data;
-
 public:
-    TQueue() : size(100), currentSize(0), data(new Stack<T>(100)) {}
-    explicit TQueue(size_t size_) : size(size_), currentSize(0), data(new Stack<T>(size_)) {}
+    TQueue(int size = 10) : size(size), front(0), back(0), count(0) {
+        data = new T[size];
+    }
 
     ~TQueue() {
-        delete data;
+        delete[] data;
     }
 
-    bool isEmpty() const {
-        return data->isEmpty();
-    }
-
-    bool isFull() const {
-        return currentSize == size;
-    }
-
-    void push(T val) {
-        if (!isFull()) {
-            data->push(val);
-            currentSize++;
+    void push(const T& value) {
+        if (count == size) {
+            throw std::overflow_error("Queue is full");
         }
-        else {
-            throw std::runtime_error("Queue is full");
-        }
+        data[back] = value;
+        back = (back + 1) % size;
+        ++count;
     }
 
     T pop() {
-        if (isEmpty()) {
-            throw std::runtime_error("Queue is empty");
+        if (count == 0) {
+            throw std::underflow_error("Queue is empty");
         }
-        T value = data->getTop();
-        data->pop();
-        currentSize--;
+        T value = data[front];
+        front = (front + 1) % size;
+        --count;
         return value;
     }
 
-    void clear() {
-        while (!isEmpty()) {
-            pop();
-        }
-    }
-
-    size_t getSize() const {
-        return currentSize;
-    }
-
     T front() const {
-        if (!isEmpty()) {
-            return data->getTop();
+        if (count == 0) {
+            throw std::underflow_error("Queue is empty");
         }
-        else {
-            throw std::runtime_error("Queue is empty");
-        }
+        return data[front];
     }
 
-    void print() const {
-        Stack<T>* temp = new Stack<T>(*data);
-        while (!temp->isEmpty()) {
-            std::cout << temp->pop() << " ";
-        }
-        std::cout << std::endl;
-        delete temp;
+    bool isEmpty() const {
+        return count == 0;
     }
+
+    int getSize() const {
+        return count;
+    }
+
+private:
+    T* data;
+    int size;
+    int front;
+    int back;
+    int count;
 };
 
-#endif // TQUEUE_TQUEUE_H_
+#endif  // LIB_QUEUE_TQUEUE_H_
