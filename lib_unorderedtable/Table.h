@@ -38,6 +38,7 @@ public:
     virtual void remove(const TKey& key) = 0;
 };
 
+// Класс неупорядоченной таблицы на массиве
 template <class TKey, class TValue>
 class UnorderedTable : public ITable<TKey, TValue> {
 protected:
@@ -45,25 +46,43 @@ protected:
 public:
     UnorderedTable() = default;
     UnorderedTable(const UnorderedTable &table) : data (table data){}
-    void remove(TKey K) override { //на массиве
-        size_t ind = find(K);
-        if (ind != -1) {
-            data[ind] = data[count];
-            count--;
+    // Метод remove удаляет пару, если ключ найден
+    void remove(const TKey& K) override {
+        for (size_t i = 0; i < count; i++) {
+            if (data[i] == K) {
+                data[i] = data[count - 1];
+                count--;
+                return;
+            }
         }
     }
-    TValue* find(const TKey& K) const override {
-        for (int i = 0, i < data.size(), i++) {
-            if (data[i] == K) return data[i].val();
+
+    // Метод replace заменяет значение для существующего ключа
+    void replace(const TKey& key, const TValue& value) override {
+        TValue* valPtr = find(key);
+        if (valPtr) {
+            *valPtr = value;
         }
     }
-    void insert(TKey rkey, TValue rval) const override {
-        size_t ind = find(rkey);
-        if (ind == -1) {
+
+    // Метод find возвращает указатель на значение,
+    // если ключ найден, иначе возвращает nullptr
+    TValue* find(const TKey& K) override {
+        for (size_t i = 0; i < count; i++) {
+            if (data[i] == K) return &(data[i].val());
+        }
+        return nullptr;
+    }
+
+    // Метод insert добавляет новую пару ключ-значение, если ключ не найден
+    void insert(const TKey& rkey, const TValue& rval) override {
+        if (find(rkey) == nullptr) {
             TPair<TKey, TValue> tmp(rkey, rval);
-            data.append(tmp);
+            data.push_back(tmp);
+            count++;
         }
     }
+
     size_t size() {
         return data.size();
     }
@@ -74,16 +93,43 @@ class UnorderedTableOnList : public ITable<TKey, TValue> {
     List < TPair < TKey, TValue>> data;
 public:
     UnorderedTableOnList() = default;
-    /*void remove(TKey K) {
-        TNode<>*
-        pos = find(K);
-        if (pos != nullptr) { data.erose(pos); }
+    UnorderedTableOnList() = default;
+
+    TValue* find(const TKey& K) override {
+        auto node = data.begin();
+        while (node != data.end()) {
+            if (node->data == K) return &(node->data.val());
+            node = node->next;
         }
-    TValue& find(const TKey) {
-        TNode cur(data.f);
-        while (cur != nullptr) {
-            if (cur.data == K) { return cur.data}
+        return nullptr;
+    }
+
+    void insert(const TKey& rkey, const TValue& rval) override {
+        if (find(rkey) == nullptr) {
+            TPair<TKey, TValue> tmp(rkey, rval);
+            data.push_back(tmp);
         }
-        cur = cur.n
-    }*/
+    }
+
+    void replace(const TKey& key, const TValue& value) override {
+        TValue* valPtr = find(key);
+        if (valPtr) {
+            *valPtr = value;
+        }
+    }
+
+    void remove(const TKey& K) override {
+        auto node = data.begin();
+        while (node != data.end()) {
+            if (node->data == K) {
+                data.erase(node);
+                return;
+            }
+            node = node->next;
+        }
+    }
+
+    size_t size() const {
+        return data.size();
+    }
 };
