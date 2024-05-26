@@ -1,4 +1,4 @@
-// Copyright (c) 2023 Dudchenko Olesya Victorovna
+// Copyright 2024 Dudchenko Olesya Victorovna
 #pragma once
 
 #include <iostream>
@@ -46,7 +46,7 @@ protected:
 public:
     UnorderedTable() = default;
     UnorderedTable(const UnorderedTable &table) : data (table data){}
-    // Метод remove удаляет пару, если ключ найден
+    // Удаляет пару, если ключ найден
     void remove(const TKey& K) override {
         for (size_t i = 0; i < count; i++) {
             if (data[i] == K) {
@@ -57,7 +57,7 @@ public:
         }
     }
 
-    // Метод replace заменяет значение для существующего ключа
+    // Заменяет значение для существующего ключа
     void replace(const TKey& key, const TValue& value) override {
         TValue* valPtr = find(key);
         if (valPtr) {
@@ -65,8 +65,7 @@ public:
         }
     }
 
-    // Метод find возвращает указатель на значение,
-    // если ключ найден, иначе возвращает nullptr
+    // Возвращает указатель на значение, если ключ найден, иначе nullptr
     TValue* find(const TKey& K) override {
         for (size_t i = 0; i < count; i++) {
             if (data[i] == K) return &(data[i].val());
@@ -74,7 +73,7 @@ public:
         return nullptr;
     }
 
-    // Метод insert добавляет новую пару ключ-значение, если ключ не найден
+    // Добавляет новую пару ключ-значение, если ключ не найден
     void insert(const TKey& rkey, const TValue& rval) override {
         if (find(rkey) == nullptr) {
             TPair<TKey, TValue> tmp(rkey, rval);
@@ -131,5 +130,74 @@ public:
 
     size_t size() const {
         return data.size();
+    }
+};
+
+template <class TKey, class TValue>
+class OrderedTable : public ITable<TKey, TValue> {
+protected:
+    TVector<TPair<TKey, TValue>> data;
+    size_t count = 0;
+
+    size_t binarySearch(const TKey& key, bool& found) const {
+        size_t left = 0;
+        size_t right = count;
+        while (left < right) {
+            size_t mid = left + (right - left) / 2;
+            if (data[mid].key() < key) {
+                left = mid + 1;
+            }
+            else if (data[mid].key() > key) {
+                right = mid;
+            }
+            else {
+                found = true;
+                return mid;
+            }
+        }
+        found = false;
+        return left;
+    }
+
+public:
+    OrderedTable() = default;
+    OrderedTable(const OrderedTable& table) : data(table.data), count(table.count) {}
+
+    TValue* find(const TKey& key) override {
+        bool found;
+        size_t index = binarySearch(key, found);
+        if (found) {
+            return &(data[index].val());
+        }
+        return nullptr;
+    }
+
+    void insert(const TKey& key, const TValue& value) override {
+        bool found;
+        size_t index = binarySearch(key, found);
+        if (!found) {
+            data.insert(index, TPair<TKey, TValue>(key, value));
+            count++;
+        }
+    }
+
+    void replace(const TKey& key, const TValue& value) override {
+        TValue* valPtr = find(key);
+        if (valPtr) {
+            *valPtr = value;
+        }
+    }
+
+    void remove(const TKey& key) override {
+        bool found;
+        size_t index = binarySearch(key, found);
+        if (found) {
+            data.removeAt(index);
+            count--;
+        }
+    }
+
+    size_t size() const {
+        return count;
     }
 };
